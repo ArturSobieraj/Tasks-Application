@@ -11,13 +11,13 @@ public class TrelloMapper {
 
     public List<TrelloBoard> mapToBoards(final List<TrelloBoardDto> trelloBoardDto) {
         return trelloBoardDto.stream()
-                .map(trelloBoard -> new TrelloBoard(trelloBoard.getName(), trelloBoard.getId(), mapToList(trelloBoard.getLists())))
+                .map(trelloBoard -> new TrelloBoard(trelloBoard.getId(), trelloBoard.getName(), mapToList(trelloBoard.getLists())))
                 .collect(Collectors.toList());
     }
 
     public List<TrelloBoardDto> mapToBoardsDto(final List<TrelloBoard> trelloBoards) {
         return trelloBoards.stream()
-                .map(trelloBoard -> new TrelloBoardDto( trelloBoard.getName(), trelloBoard.getId(), mapToListDto(trelloBoard.getList())))
+                .map(trelloBoard -> new TrelloBoardDto( trelloBoard.getId(), trelloBoard.getName(), mapToListDto(trelloBoard.getList())))
                 .collect(Collectors.toList());
     }
 
