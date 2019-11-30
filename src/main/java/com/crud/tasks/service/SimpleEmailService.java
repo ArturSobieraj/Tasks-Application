@@ -29,7 +29,17 @@ public class SimpleEmailService {
             javaMailSender.send(createdMimeMessage(mail));
             LOGGER.info("Email has been sent");
         } catch (MailException e) {
-            LOGGER.error("Faild to process email sending: ", e.getMessage(), e);
+            LOGGER.error("Faild to process email sending: " + e.getMessage());
+        }
+    }
+
+    public void sendDailyMail(final Mail mail) {
+        LOGGER.info("Preparing daily mail...");
+        try {
+            javaMailSender.send(createDailyTasksMail(mail));
+            LOGGER.info("Email has been sent");
+        } catch (MailException e) {
+            LOGGER.error("Email error, sending failed " + e.getMessage());
         }
     }
 
@@ -41,6 +51,16 @@ public class SimpleEmailService {
             messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
         };
     }
+
+    private MimeMessagePreparator createDailyTasksMail(final Mail mail) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setTo(mail.getMailTo());
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(mailCreatorService.buildTaskInDatabaseMail(mail.getMessage()), true);
+        };
+    }
+
     private SimpleMailMessage createMailMessage(final Mail mail) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
